@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Informatika Dasar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #e0f2f1;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wadah {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #00695c;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        /* === HALAMAN LOGIN === */
+        .halaman-login {
+            display: block;
+        }
+        .halaman-kuis, .halaman-hasil {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #004d40;
+        }
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #b2dfdb;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            cursor: pointer;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #00796b;
+        }
+
+        /* === KOTAK PENCARIAN NAMA === */
+        .kotak-pencarian {
+            position: relative;
+        }
+        #cariNama {
+            margin-bottom: 8px;
+        }
+        .daftar-nama-hasil {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 280px;
+            overflow-y: auto;
+            background: white;
+            border: 2px solid #b2dfdb;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            z-index: 100;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        .saran-nama {
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 14px;
+            border-bottom: 1px solid #e0f2f1;
+        }
+        .saran-nama:hover {
+            background: #e0f2f1;
+        }
+        .saran-nama:last-child {
+            border-bottom: none;
+        }
+        .tidak-ada-hasil {
+            padding: 12px;
+            color: #757575;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .btn-mulai {
+            width: 100%;
+            padding: 12px;
+            background: #00796b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-mulai:hover {
+            background: #004d40;
+        }
+        .pesan-error {
+            color: #d32f2f;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            display: none;
+        }
+        .sembunyi {
+            display: none !important;
+        }
+
+        /* === HALAMAN KUIS === */
+        .info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: #b2dfdb;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .identitas {
+            width: 100%;
+            font-size: 13px;
+            color: #004d40;
+            margin-bottom: 5px;
+        }
+
+        .soal {
+            background: #f1f8e9;
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 5px solid #558b2f;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .pilihan {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tombol {
+            padding: 12px;
+            font-size: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #4fc3f7;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .tombol:hover:not(:disabled) {
+            background: #0288d1;
+            color: white;
+            transform: translateX(3px);
+        }
+
+        .tombol:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        #pesan {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        #tombolLanjut {
+            margin-top: 15px;
+            width: 100%;
+            padding: 12px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #tombolLanjut:hover {
+            background: #f57c00;
+        }
+
+        /* === HALAMAN HASIL === */
+        .halaman-hasil {
+            text-align: center;
+            padding: 20px;
+        }
+        .halaman-hasil h2 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        .skor {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #00796b;
+        }
+        .btn-ulang {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .btn-ulang:hover {
+            background: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="wadah">
+        <!-- HALAMAN LOGIN -->
+        <div class="halaman-login" id="halamanLogin">
+            <h1>MASUK KUIS INFORMATIKA</h1>
+            <div class="form-group">
+                <label>Nama Lengkap Siswa</label>
+                <div class="kotak-pencarian">
+                    <input type="text" id="cariNama" placeholder="Ketik nama atau huruf (contoh: a)..." autocomplete="off">
+                    <div class="daftar-nama-hasil sembunyi" id="daftarSaranNama"></div>
+                </div>
+            </div>
+            <div class="form-group sembunyi" id="kolomNamaLain">
+                <label>Tuliskan Nama Kamu</label>
+                <input type="text" id="inputNamaLain" placeholder="Masukkan nama lengkapmu..." autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>Kelas</label>
+                <select id="inputKelas">
+                    <option value="">-- Pilih Kelas --</option>
+                    <option value="X.1">X.1</option>
+                    <option value="X.2">X.2</option>
+                    <option value="XI">XI</option>
+                    <option value="XII.1">XII.1</option>
+                    <option value="XII.2">XII.2</option>
+                </select>
+            </div>
+            <button class="btn-mulai" id="btnMulai">MULAI KUIS</button>
+            <div class="pesan-error" id="pesanError">Silakan Pilih Nama dan Kelas terlebih dahulu!</div>
+        </div>
+
+        <!-- HALAMAN KUIS -->
+        <div class="halaman-kuis" id="halamanKuis">
+            <h1>PERMAINAN KUIS INFORMATIKA</h1>
+            <div class="info">
+                <div class="identitas">Nama: <span id="tampilNama"></span> | Kelas: <span id="tampilKelas"></span></div>
+                <div>Poin: <span id="nilai">0</span></div>
+                <div>Soal <span id="noSoal">1</span> / 15</div>
+            </div>
+
+            <div class="soal">
+                <p id="teksSoal"></p>
+            </div>
+
+            <div class="pilihan" id="kotakPilihan"></div>
+            <div id="pesan"></div>
+            <button id="tombolLanjut">Soal Berikutnya</button>
+        </div>
+
+        <!-- HALAMAN HASIL -->
+        <div class="halaman-hasil" id="halamanHasil">
+            <h2>🎉 KUIS SELESAI!</h2>
+            <p>Nama: <span id="hasilNama"></span></p>
+            <p>Kelas: <span id="hasilKelas"></span></p>
+            <div class="skor">Skor Kamu: <span id="skorAkhir"></span> / 15</div>
+            <p id="pesanNilai"></p>
+            <button class="btn-ulang" onclick="location.reload()">KERJAKAN ULANG</button>
+        </div>
+    </div>
+
+    <script>
+        // === DAFTAR SEMUA NAMA SISWA ===
+        const daftarSemuaNama = [
+            "AGUNG LASMANA", "AHMAD MAULANA", "ANA NI'MATUL ULAA", "ARYA SAPUTRA",
+            "BUNGA SAFITRI", "DEA RATNA", "DIMAS ADITIA", "EDWARD FABIANO",
+            "FAHRANI SALSABILA KURNIAWAN", "FIFIH NAILAH", "FUJIYANTI ARAFAH",
+            "HALIMAH REGINA PUTRI", "KEYSA AGITA PUTRI", "MOH SAKU", "MUCHAROPI",
+            "M. REZA", "NUR AZIZAH", "REFA", "RENALDI SETIAWAN", "SUPRIYOGI",
+            "SYIFAA KHOIRUNNISA", "UMU AIMAN", "VIDIYAH AYUNI", "WIDIA NINGSIH",
+            "ALENI", "AHMAD MAULUDDIN", "AKHMAD KAELANI", "ASYARA ADILLA KHANZA",
+            "BENTAR AL HUSNA", "CHIKA RAMADHANI", "DZAKY ALMER JAMAIL", "ERIKA HAMID",
+            "FAHAT DWI SAPUTRA", "FADHEA DWI VANNESA", "HAFIZAH NURUL AEINI",
+            "HABIBUN NURULLAH", "KHOERUL AZAM", "KENANGA AFISTA", "MARIO FATAN DERMAWAN",
+            "MUHAMAD DAVIN FERDIANSYAH", "MUHAMMAD ARIF AMIRUDDIN", "NURHALIMAH",
+            "PUTRI ANGGRAENI", "REZA", "RIFAT HIDAYAT", "SYAHPUTRA", "SELY RAHMADANI",
+            "SAMIUN", "ZULFIKAR", "ABDUL HAMID", "AGUNG PRAMANA", "ANDIKA RIZKI PUTRA",
+            "APRIYAN", "ASIYA", "DWI ANDIN JUANITA", "EFAN APRIANSYAH", "GALANG DWI PRATAMA",
+            "HENGKI", "ILHAM NOOR FAMI", "MEGA MUSTIKA", "MOH ADILATUN", "MOH FAZRI AMRULLAH",
+            "MOH. ARIF MAULANA", "MOH. MAULANA", "MOH. RIZAL", "MOHAMAD REVALDI",
+            "MOHAMMAD FARID HUSEN", "MOHAMMAD SHOPIULLAH", "MUFLIKHA DWI WAHYUNI",
+            "MUHAMAD ARSYADATUL UMAM", "MUHAMAD FADIL FADILLAH", "MUHAMMAD NUR ZAFIN",
+            "MUHAMMAD SANDIH", "NATASYA RAMADHANTI", "NOVA ALFIANA", "RAMADAN",
+            "RISKY MAULANA", "SEKAR KEMUNING", "SELVI", "SHERLY KHASANAH", "SITI AFNI AULIYAH",
+            "SOLEHA WIDIA WATI", "SULAIMAN", "SYIFATURRAHMAWATI", "ADEL LITA", "ALHANA",
+            "ALPIN MUBAROK", "ANDI IBRAHIM BAANGGA RAHAWARIN", "DIKI FIRMANSYAH",
+            "FADLI FASHA SHAPUTRA", "GALIH VIJAR NUGRAHA", "IJJATUL HIMAH",
+            "LIOTY ATTALA PRIYANA", "MARSELA AURILIANI PUTRI", "MUHAMMAD IZARRUL AZHAR",
+            "MUHAMMAD RIZQI ASHSHUBHI", "NAIF DERMAWAN", "NINA NATASYA", "NURUL AINI",
+            "PUTRI NURITA", "SAEFUL MU'MIN AL MADANI", "SALMAH", "SITI FITRIYAH",
+            "SUNADI", "TATIH AGUSTINA", "ZIDNI ILMAN", "AHMAD RIYANI", "ALDIANSYAH",
+            "ANGGA", "ARMAN", "AULIA RAHMAWATI", "DAMAR ADIYASA", "GIO RAHMADHAN",
+            "IMAN MAULANA", "LUVI SAHRUL", "MELISA", "MOHAMMAD AFIF MAULANA",
+            "MOHAMMAD YASIN ARAFAT", "NABILA AZZALIA PUTRI", "NATASHA SAFFA AZAHRA",
+            "NILA LESTARI", "NUR AZIZAH", "SAFIRA DEWI", "SEMI AJI DILAGA",
+            "SITI RAHMA YANI", "SITI SHOLEHA", "SRI HAYATI", "SUCI SEPTIANI",
+            "SUTA", "TIARA PUTRI FEBRIYANTI", "--- LAINNYA ---"
+        ];
+
+        // === 15 SOAL BARU (TANPA SISTEM PAKET) ===
+        const daftarSoal = [
+            { soal: "1. Alat yang digunakan untuk memasukkan data ke dalam komputer disebut...", pilihan: ["A. Alat Output", "B. Alat Input", "C. Alat Pemroses", "D. Alat Penyimpanan", "E. Alat Tampilan"], benar: 1 },
+            { soal: "2. Kepanjangan dari CPU adalah...", pilihan: ["A. Central Process Unit", "B. Central Processing Unit", "C. Computer Process Unit", "D. Computer Processing Utility", "E. Central Program Unit"], benar: 1 },
+            { soal: "3. Memori yang isinya akan hilang jika komputer dimatikan disebut...", pilihan: ["A. ROM", "B. Harddisk", "C. RAM", "D. Flashdisk", "E. CD"], benar: 2 },
+            { soal: "4. Perangkat lunak yang berfungsi mengatur seluruh kerja komputer disebut...", pilihan: ["A. Program Aplikasi", "B. Sistem Operasi", "C. Bahasa Pemrograman", "D. Utilitas", "E. Driver"], benar: 1 },
+            { soal: "5. Angka dasar yang digunakan dalam sistem bilangan biner adalah...", pilihan: ["A. 10", "B. 8", "C. 16", "D. 2", "E. 1"], benar: 3 },
+            { soal: "6. Simbol yang digunakan untuk perkalian pada rumus Excel adalah...", pilihan: ["A. x", "B. *", "C. /", "D. +", "E. &"], benar: 1 },
+            { soal: "7. Jaringan komputer yang mencakup wilayah kota disebut...", pilihan: ["A. LAN", "B. WAN", "C. MAN", "D. PAN", "E. SAN"], benar: 2 },
+            { soal: "8. Alamat unik yang dimiliki setiap perangkat di internet disebut...", pilihan: ["A. Alamat Rumah", "B. Alamat IP", "C. Alamat Nama", "D. Alamat Web", "E. Alamat Email"], benar: 1 },
+            { soal: "9. Program yang dirancang untuk merusak sistem komputer disebut...", pilihan: ["A. Aplikasi", "B. Virus", "C. Sistem Operasi", "D. Driver", "E. File"], benar: 1 },
+            { soal: "10. Fungsi utama dari algoritma adalah...", pilihan: ["A. Mempercantik program", "B. Langkah penyelesaian masalah", "C. Mempercepat komputer", "D. Membuat kode rumit", "E. Menghapus data"], benar: 1 },
+            { soal: "11. Bagian komputer yang berfungsi menampilkan hasil pengolahan data adalah...", pilihan: ["A. Keyboard", "B. Mouse", "C. Monitor", "D. Processor", "E. RAM"], benar: 2 },
+            { soal: "12. Dalam penamaan file, bagian setelah titik disebut...", pilihan: ["A. Nama file", "B. Ekstensi file", "C. Lokasi file", "D. Ukuran file", "E. Tanggal file"], benar: 1 },
+            { soal: "13. Tombol yang digunakan untuk memilih semua teks sekaligus adalah...", pilihan: ["A. Ctrl + C", "B. Ctrl + V", "C. Ctrl + A", "D. Ctrl + X", "E. Ctrl + Z"], benar: 2 },
+            { soal: "14. Jenis data yang berupa kalimat atau huruf disebut...", pilihan: ["A. Numerik", "B. Teks/String", "C. Tanggal", "D. Logika", "E. Angka"], benar: 1 },
+            { soal: "15. Aturan penulisan kode pemrograman agar dapat dimengerti komputer disebut...", pilihan: ["A. Algoritma", "B. Sintaks", "C. Variabel", "D. Fungsi", "E. Perintah"], benar: 1 }
+        ];
+
+        // === VARIABEL ===
+        let nomor = 0;
+        let poin = 0;
+        let namaSiswa = "";
+        let kelasSiswa = "";
+
+        // === ELEMEN HALAMAN ===
+        const halamanLogin = document.getElementById("halamanLogin");
+        const halamanKuis = document.getElementById("halamanKuis");
+        const halamanHasil = document.getElementById("halamanHasil");
+        const cariNama = document.getElementById("cariNama");
+        const daftarSaranNama = document.getElementById("daftarSaranNama");
+        const kolomNamaLain = document.getElementById("kolomNamaLain");
+        const inputNamaLain = document.getElementById("inputNamaLain");
+        const inputKelas = document.getElementById("inputKelas");
+        const btnMulai = document.getElementById("btnMulai");
+        const pesanError = document.getElementById("pesanError");
+
+        const tampilNama = document.getElementById("tampilNama");
+        const tampilKelas = document.getElementById("tampilKelas");
+        const teksSoal = document.getElementById("teksSoal");
+        const kotakPilihan = document.getElementById("kotakPilihan");
+        const nilai = document.getElementById("nilai");
+        const noSoal = document.getElementById("noSoal");
+        const pesan = document.getElementById("pesan");
+        const tombolLanjut = document.getElementById("tombolLanjut");
+
+        const hasilNama = document.getElementById("hasilNama");
+        const hasilKelas = document.getElementById("hasilKelas");
+        const skorAkhir = document.getElementById("skorAkhir");
+        const pesanNilai = document.getElementById("pesanNilai");
+
+        // === FITUR PENCARIAN NAMA ===
+        cariNama.addEventListener("input", () => {
+            const kataKunci = cariNama.value.trim().toUpperCase();
+            daftarSaranNama.innerHTML = "";
+            kolomNamaLain.classList.add("sembunyi");
+
+            if (kataKunci === "") {
+                daftarSaranNama.classList.add("sembunyi");
+                return;
+            }
+
+            const hasilCari = daftarSemuaNama.filter(nama => nama.toUpperCase().includes(kataKunci));
+
+            if (hasilCari.length === 0) {
+                daftarSaranNama.innerHTML = "<div class='tidak-ada-hasil'>Nama tidak ditemukan. Silakan tulis sendiri.</div>";
+                daftarSaranNama.classList.remove("sembunyi");
+                return;
+            }
+
+            hasilCari.forEach(nama => {
+                const opsi = document.createElement("div");
+                opsi.className = "saran-nama";
+                opsi.textContent = nama;
+                opsi.onclick = () => {
+                    if (nama === "--- LAINNYA ---") {
+                        cariNama.value = "";
+                        kolomNamaLain.classList.remove("sembunyi");
+                        inputNamaLain.focus();
+                    } else {
+                        cariNama.value = nama;
+                    }
+                    daftarSaranNama.classList.add("sembunyi");
+                };
+                daftarSaranNama.appendChild(opsi);
+            });
+
+            daftarSaranNama.classList.remove("sembunyi");
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!cariNama.contains(e.target) && !daftarSaranNama.contains(e.target)) {
+                daftarSaranNama.classList.add("sembunyi");
+            }
+        });
+
+        // === FUNGSI MULAI KUIS ===
+        btnMulai.addEventListener("click", () => {
+            namaSiswa = kolomNamaLain.classList.contains("sembunyi") ? cariNama.value.trim() : inputNamaLain.value.trim();
+            kelasSiswa = inputKelas.value.trim();
+
+            if (namaSiswa === "" || kelasSiswa === "") {
+                pesanError.textContent = kolomNamaLain.classList.contains("sembunyi") && namaSiswa === ""
+                    ? "Silakan Ketik dan Pilih Nama terlebih dahulu!"
+                    : "Silakan Lengkapi Nama dan Kelas terlebih dahulu!";
+                pesanError.style.display = "block";
+                return;
+            }
+
+            pesanError.style.display = "none";
+            halamanLogin.style.display = "none";
+            halamanKuis.style.display = "block";
+            tampilNama.textContent = namaSiswa;
+            tampilKelas.textContent = kelasSiswa;
+            tampilSoal();
+        });
+
+        // === TAMPILKAN SOAL ===
+        function tampilSoal() {
+            const soalSekarang = daftarSoal[nomor];
+            teksSoal.textContent = soalSekarang.soal;
+            kotakPilihan.innerHTML = "";
+            pesan.style.display = "none";
+            tombolLanjut.style.display = "none";
+            noSoal.textContent = nomor + 1;
+
+            soalSekarang.pilihan.forEach((pilih, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "tombol";
+                btn.textContent = pilih;
+                btn.onclick = () => cekJawaban(idx, btn);
+                kotakPilihan.appendChild(btn);
+            });
+        }
+
+        // === CEK JAWABAN ===
+        function cekJawaban(pilihanUser, tombolPilih) {
+            const semuaTombol = document.querySelectorAll(".tombol");
+            semuaTombol.forEach(b => b.disabled = true);
+            pesan.style.display = "block";
+
+            if (pilihanUser === daftarSoal[nomor].benar) {
+                poin++;
+                nilai.textContent = poin;
+                pesan.textContent = "✅ JAWABAN BENAR! Poin bertambah 1";
+                pesan.style.background = "#c8e6c9";
+                pesan.style.color = "#2e7d32";
+                tombolPilih.style.background = "#4caf50";
+            } else {
+                pesan.textContent = "❌ JAWABAN SALAH";
+                pesan.style.background = "#ffcdd2";
+                pesan.style.color = "#c62828";
+                tombolPilih.style.background = "#f44336";
+            }
+
+            tombolLanjut.style.display = "block";
+        }
+
+        // === TOMBOL LANJUT ===
+        tombolLanjut.onclick = () => {
+            nomor++;
+            if (nomor < daftarSoal.length) {
+                tampilSoal();
+            } else {
+                tampilHasil();
+            }
+        };
+
+        // === TAMPILKAN HASIL AKHIR ===
+        function tampilHasil() {
+            halamanKuis.style.display = "none";
+            halamanHasil.style.display = "block";
+            hasilNama.textContent = namaSiswa;
+            hasilKelas.textContent = kelasSiswa;
+            skorAkhir.textContent = poin;
+
+            if (poin >= 12) pesanNilai.textContent = "🌟 Luar biasa! Penguasaan materi sangat baik.";
+            else if (poin >= 9) pesanNilai.textContent = "👍 Bagus! Tingkatkan lagi pemahamanmu.";
+            else pesanNilai.textContent = "💪 Semangat belajar lagi ya, pasti bisa lebih baik!";
+        }
+    </script>
+</body>
+</html>
