@@ -302,7 +302,7 @@
             <h2>🎉 KUIS SELESAI!</h2>
             <p>Nama: <span id="hasilNama"></span></p>
             <p>Kelas: <span id="hasilKelas"></span></p>
-            <div class="skor">Skor Kamu: <span id="skorAkhir"></span> / 10</div>
+            <div class="skor">Skor Kamu: <span id="skorAkhir"></span> / 100</div>
             <p id="pesanNilai"></p>
             <button class="btn-ulang" onclick="location.reload()">KERJAKAN ULANG</button>
         </div>
@@ -346,19 +346,18 @@
             "SUTA", "TIARA PUTRI FEBRIYANTI", "--- LAINNYA ---"
         ];
 
-        // === 15 SOAL BARU (TANPA SISTEM PAKET) ===
+        // === 10 SOAL PILIHAN GANDA ===
         const daftarSoal = [
-            { soal: "1. Web Browser merupakan tools utama yang digunakan untuk menampilkan halaman web, Manakah yang bukan Web Browser yang sering digunakan di PC ...", pilihan: ["A. Google Chrome", "B. Safari", "C. FireFox", "D. Microsoft Store", "E. Microsof Edge"], benar: 3 },
+            { soal: "1. Web Browser merupakan tools utama yang digunakan untuk menampilkan halaman web, Manakah yang bukan Web Browser yang sering digunakan di PC ...", pilihan: ["A. Google Chrome", "B. Safari", "C. FireFox", "D. Microsoft Store", "E. Microsoft Edge"], benar: 3 },
             { soal: "2. Kepanjangan dari HTML adalah ...", pilihan: ["A. Hyper Text Markup Language", "B. High Tech Modern Language", "C. Hyperlink Text Management Language", "D. Home Tool Markup Language", "E. Hyper Text Multi Language"], benar: 0 },
             { soal: "3. Aplikasi yang digunakan untuk membuat HTML ...", pilihan: ["A. Notepad++", "B. Google Chrome", "C. RAM", "D. WPS", "E. Notepad"], benar: 0 },
             { soal: "4. Penulisan paragraf dalam html...", pilihan: ["A. <paragraf>", "B. <p>", "C. paragraf", "D. p", "E. semua benar"], benar: 1 },
             { soal: "5. Untuk membuat judul pada HTML menggunakan tag ...", pilihan: ["A. <h1>", "B. <h2>", "C. <title>", "D. <body>", "E. <head>"], benar: 2 },
-            { soal: "6. tag penutup untuk head yang benar adalah ...", pilihan: ["A. <head>", "B. <h2>", "C. <title>", "D. <body>", "E. </head>"], benar: 4 },
+            { soal: "6. Tag penutup untuk head yang benar adalah ...", pilihan: ["A. <head>", "B. <h2>", "C. <title>", "D. <body>", "E. </head>"], benar: 4 },
             { soal: "7. HTML diciptakan pada tahun...", pilihan: ["A. 1994", "B. 1997", "C. 1990", "D. 1992", "E. 1995"], benar: 1 },
-            { soal: "8. Salah satu manfaat HTML5 adalah...", pilihan: ["A. Penanganan error yang ribet", "B. Tampilan tidak menarik", "C. Website Responsive", "D. Tidak menggukan JavaScript", "E. Semua Benar"], benar: 3 },
-            { soal: "9. penulisan tag pembuka dan tag penutup yang benar adalah...", pilihan: ["A. <p>....</p>", "B. <head>....</p>", "C. <p>....</head>", "D. <html>....>/html<", "E. ><head....></head"], benar: 0 },
-            { soal: "10. Untuk mendefinisikan Struktur dan elemen menggunakan karakter disebut...", pilihan: ["A. Tag", "B. koding", "C. elemen", "D. struktur", "E. semua benar"], benar: 0 },
-            
+            { soal: "8. Salah satu manfaat HTML5 adalah...", pilihan: ["A. Penanganan error yang ribet", "B. Tampilan tidak menarik", "C. Website Responsive", "D. Tidak menggukan JavaScript", "E. Semua Benar"], benar: 2 },
+            { soal: "9. Penulisan tag pembuka dan tag penutup yang benar adalah...", pilihan: ["A. <p>....</p>", "B. <head>....</p>", "C. <p>....</head>", "D. <html>....>/html<", "E. ><head....></head"], benar: 0 },
+            { soal: "10. Untuk mendefinisikan Struktur dan elemen menggunakan karakter disebut...", pilihan: ["A. Tag", "B. Koding", "C. Elemen", "D. Struktur", "E. Semua benar"], benar: 0 }
         ];
 
         // === VARIABEL ===
@@ -366,6 +365,7 @@
         let poin = 0;
         let namaSiswa = "";
         let kelasSiswa = "";
+        const NILAI_SOAL = 10; // Nilai per soal
 
         // === ELEMEN HALAMAN ===
         const halamanLogin = document.getElementById("halamanLogin");
@@ -477,16 +477,16 @@
             });
         }
 
-        // === CEK JAWABAN ===
+        // === CEK JAWABAN (SETIAP BENAR +10 POIN) ===
         function cekJawaban(pilihanUser, tombolPilih) {
             const semuaTombol = document.querySelectorAll(".tombol");
             semuaTombol.forEach(b => b.disabled = true);
             pesan.style.display = "block";
 
             if (pilihanUser === daftarSoal[nomor].benar) {
-                poin++;
+                poin += NILAI_SOAL;
                 nilai.textContent = poin;
-                pesan.textContent = "✅ JAWABAN BENAR! Poin bertambah 1";
+                pesan.textContent = `✅ JAWABAN BENAR! Poin bertambah ${NILAI_SOAL}`;
                 pesan.style.background = "#c8e6c9";
                 pesan.style.color = "#2e7d32";
                 tombolPilih.style.background = "#4caf50";
@@ -518,8 +518,8 @@
             hasilKelas.textContent = kelasSiswa;
             skorAkhir.textContent = poin;
 
-            if (poin >= 9) pesanNilai.textContent = "🌟 Luar biasa! Penguasaan materi sangat baik.";
-            else if (poin >= 7) pesanNilai.textContent = "👍 Bagus! Tingkatkan lagi pemahamanmu.";
+            if (poin >= 90) pesanNilai.textContent = "🌟 Luar biasa! Penguasaan materi sangat baik.";
+            else if (poin >= 70) pesanNilai.textContent = "👍 Bagus! Tingkatkan lagi pemahamanmu.";
             else pesanNilai.textContent = "💪 Semangat belajar lagi ya, pasti bisa lebih baik!";
         }
     </script>
