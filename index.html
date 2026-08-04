@@ -114,7 +114,7 @@
             background-color: #1565c0;
         }
 
-        /* Styling Lembar Ujian (DIPERBARUI) */
+        /* Styling Lembar Ujian */
         #examArea {
             display: none;
         }
@@ -203,7 +203,7 @@
         }
 
         .soal-item {
-            display: none; /* Disembunyikan, hanya nomor aktif yang tampil */
+            display: none;
         }
 
         .soal-item.active {
@@ -247,7 +247,7 @@
             transform: scale(1.1);
         }
 
-        /* Navigasi Bawah (Sebelumnya & Selanjutnya) */
+        /* Navigasi Bawah */
         .exam-navigation {
             display: flex;
             justify-content: space-between;
@@ -282,7 +282,26 @@
         #scoreResult {
             display: none;
             text-align: center;
-            padding: 20px;
+            padding: 25px;
+        }
+
+        .identitas-hasil {
+            background: #f0f4f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+            border-left: 4px solid #2a5298;
+        }
+
+        .identitas-hasil p {
+            margin-bottom: 5px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .identitas-hasil strong {
+            color: #1e3c72;
         }
 
         .score-circle {
@@ -316,7 +335,6 @@
             <h2>Portal Login Ujian</h2>
             
             <form id="loginForm">
-                <!-- Pilihan Kelas -->
                 <div class="form-group">
                     <label for="kelas">Pilih Kelas:</label>
                     <select id="kelas" required onchange="loadNamaSiswa()">
@@ -329,7 +347,6 @@
                     </select>
                 </div>
 
-                <!-- Pilihan Nama Siswa -->
                 <div class="form-group">
                     <label for="nama">Pilih Nama Siswa:</label>
                     <select id="nama" required disabled>
@@ -343,7 +360,7 @@
             <div id="resultBox" class="result-box"></div>
         </div>
 
-        <!-- Area Ujian Online (UI DIPERBARUI) -->
+        <!-- Area Ujian Online -->
         <div id="examArea" class="card">
             <div class="exam-header">
                 <div class="user-info">
@@ -355,7 +372,6 @@
                 </div>
             </div>
 
-            <!-- Panel Navigasi Nomor Soal -->
             <div class="number-nav-container">
                 <div class="number-nav-title">Navigasi Soal</div>
                 <div id="numberGrid" class="number-grid"></div>
@@ -375,9 +391,17 @@
             </form>
         </div>
 
-        <!-- Area Hasil Ujian -->
+        <!-- Area Hasil Ujian (DITAMBAHKAN TAMPILAN NAMA & KELAS) -->
         <div id="scoreResult" class="card">
             <h2>Hasil Ujian Online</h2>
+            
+            <!-- Bagian Identitas Siswa di Hasil -->
+            <div class="identitas-hasil">
+                <p><strong>Nama Lengkap:</strong> <span id="hasilNama"></span></p>
+                <p><strong>Kelas:</strong> <span id="hasilKelas"></span></p>
+                <p><strong>Paket Soal:</strong> <span id="hasilPaket"></span></p>
+            </div>
+
             <div class="score-circle" id="finalScore">0</div>
             <div class="score-details" id="scoreDetails"></div>
             <button onclick="location.reload()" class="btn-submit">Selesai & Keluar</button>
@@ -483,7 +507,10 @@
         ];
 
         let activeSoalList = [];
-        let currentQuestionIndex = 0; // State untuk melacak nomor soal yang dibuka
+        let currentQuestionIndex = 0;
+        let namaSiswaTerpilih = "";
+        let kelasSiswaTerpilih = "";
+        let paketSoalTerpilih = "";
 
         // Dynamic Loading Dropdown Nama Siswa
         function loadNamaSiswa() {
@@ -520,13 +547,16 @@
                 return;
             }
 
+            // Simpan data siswa ke variabel global
+            namaSiswaTerpilih = nama;
+            kelasSiswaTerpilih = kelas;
+
             // Aturan Penentuan Paket Soal
-            let namaPaket = "";
             if (kelas === "Kelas XII.1" || kelas === "Kelas XII.2") {
-                namaPaket = "Paket A (HTML)";
+                paketSoalTerpilih = "Paket A (HTML)";
                 activeSoalList = paketSoalA;
             } else if (kelas === "Kelas X.1" || kelas === "Kelas X.2" || kelas === "Kelas XI") {
-                namaPaket = "Paket B (C++)";
+                paketSoalTerpilih = "Paket B (C++)";
                 activeSoalList = paketSoalB;
             }
 
@@ -534,13 +564,13 @@
             document.getElementById("loginCard").style.display = "none";
             document.getElementById("dispNama").textContent = nama;
             document.getElementById("dispKelas").textContent = kelas;
-            document.getElementById("dispPaket").textContent = namaPaket;
+            document.getElementById("dispPaket").textContent = paketSoalTerpilih;
 
             renderSoal();
             document.getElementById("examArea").style.display = "block";
         });
 
-        // Function Render Soal Ujian & Grid Nomor (DIPERBARUI)
+        // Function Render Soal Ujian & Grid Nomor
         function renderSoal() {
             const container = document.getElementById("questionsContainer");
             const numberGrid = document.getElementById("numberGrid");
@@ -550,7 +580,7 @@
             currentQuestionIndex = 0;
 
             activeSoalList.forEach((item, index) => {
-                // 1. Render Tombol Grid Nomor
+                // Render Tombol Grid Nomor
                 const btnNum = document.createElement("button");
                 btnNum.type = "button";
                 btnNum.className = `btn-number ${index === 0 ? 'active' : ''}`;
@@ -561,7 +591,7 @@
                 };
                 numberGrid.appendChild(btnNum);
 
-                // 2. Render Konten Soal
+                // Render Konten Soal
                 const divSoal = document.createElement("div");
                 divSoal.className = `soal-item ${index === 0 ? 'active' : ''}`;
                 divSoal.id = `soal-item-${index}`;
@@ -593,11 +623,9 @@
 
         // Pindah ke Soal Spesifik saat Nomor Klik
         function jumpToQuestion(index) {
-            // Sembunyikan soal aktif lama
             document.getElementById(`soal-item-${currentQuestionIndex}`).classList.remove("active");
             document.getElementById(`btn-num-${currentQuestionIndex}`).classList.remove("active");
 
-            // Tampilkan soal baru
             currentQuestionIndex = index;
             document.getElementById(`soal-item-${currentQuestionIndex}`).classList.add("active");
             document.getElementById(`btn-num-${currentQuestionIndex}`).classList.add("active");
@@ -652,20 +680,26 @@
             }
 
             const salahCount = totalSoal - benarCount;
-            const totalNilai = benarCount * 5; // Setiap 1 soal bernilai 5 poin
+            const totalNilai = benarCount * 5;
 
-            // Tampilkan Halaman Hasil
+            // Tampilkan Halaman Hasil DENGAN Identitas Siswa
             document.getElementById("examArea").style.display = "none";
+            
+            // Isi data identitas di halaman hasil
+            document.getElementById("hasilNama").textContent = namaSiswaTerpilih;
+            document.getElementById("hasilKelas").textContent = kelasSiswaTerpilih;
+            document.getElementById("hasilPaket").textContent = paketSoalTerpilih;
+            
             document.getElementById("finalScore").textContent = totalNilai;
             document.getElementById("scoreDetails").innerHTML = `
-                Jawaban Benar: <strong>${benarCount}</strong> soal (${benarCount * 5} Poin)<br>
+                Jawaban Benar: <strong>${benarCount}</strong> soal<br>
                 Jawaban Salah: <strong>${salahCount}</strong> soal<br>
                 Total Soal: <strong>${totalSoal}</strong> Butir
             `;
             document.getElementById("scoreResult").style.display = "block";
         });
 
-        // Helper untuk keamanan penulisan Tag HTML agar tidak ter-render sebagai elemen
+        // Helper untuk keamanan penulisan Tag HTML
         function escapeHTML(str) {
             return str
                 .replace(/&/g, "&amp;")
