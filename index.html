@@ -23,7 +23,7 @@
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
         }
 
         .card {
@@ -114,7 +114,7 @@
             background-color: #1565c0;
         }
 
-        /* Styling Lembar Ujian */
+        /* Styling Lembar Ujian (DIPERBARUI) */
         #examArea {
             display: none;
         }
@@ -136,17 +136,85 @@
             margin-bottom: 4px;
         }
 
+        /* Grid Navigasi Nomor Soal */
+        .number-nav-container {
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .number-nav-title {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #6c757d;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 8px;
+        }
+
+        .btn-number {
+            padding: 8px 0;
+            background-color: #e9ecef;
+            color: #495057;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-number:hover {
+            background-color: #dee2e6;
+        }
+
+        .btn-number.active {
+            background-color: #2a5298;
+            color: white;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 2px rgba(42, 82, 152, 0.3);
+        }
+
+        .btn-number.answered {
+            background-color: #27ae60;
+            color: white;
+            border-color: #219653;
+        }
+
+        .btn-number.active.answered {
+            background-color: #1e7e34;
+            border-color: #114b1f;
+            box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.4);
+        }
+
+        .soal-card {
+            background: #fff;
+            padding: 10px 5px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
         .soal-item {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed #ddd;
+            display: none; /* Disembunyikan, hanya nomor aktif yang tampil */
+        }
+
+        .soal-item.active {
+            display: block;
         }
 
         .soal-text {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             color: #222;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             line-height: 1.5;
         }
 
@@ -155,13 +223,13 @@
         }
 
         .option-item {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .option-item label {
             display: flex;
             align-items: center;
-            padding: 10px 14px;
+            padding: 12px 16px;
             border: 1px solid #e0e0e0;
             border-radius: 6px;
             cursor: pointer;
@@ -176,6 +244,38 @@
         .option-item input[type="radio"] {
             margin-right: 12px;
             accent-color: #2a5298;
+            transform: scale(1.1);
+        }
+
+        /* Navigasi Bawah (Sebelumnya & Selanjutnya) */
+        .exam-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-nav {
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-nav:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-nav:disabled {
+            background-color: #e0e0e0;
+            color: #a0a0a0;
+            cursor: not-allowed;
         }
 
         /* Result Section */
@@ -243,7 +343,7 @@
             <div id="resultBox" class="result-box"></div>
         </div>
 
-        <!-- Area Ujian Online -->
+        <!-- Area Ujian Online (UI DIPERBARUI) -->
         <div id="examArea" class="card">
             <div class="exam-header">
                 <div class="user-info">
@@ -255,9 +355,23 @@
                 </div>
             </div>
 
+            <!-- Panel Navigasi Nomor Soal -->
+            <div class="number-nav-container">
+                <div class="number-nav-title">Navigasi Soal</div>
+                <div id="numberGrid" class="number-grid"></div>
+            </div>
+
             <form id="examForm">
-                <div id="questionsContainer"></div>
-                <button type="submit" class="btn-submit" style="margin-top: 20px; background-color: #27ae60;">Kirim & Selesaikan Ujian</button>
+                <div class="soal-card">
+                    <div id="questionsContainer"></div>
+                </div>
+
+                <div class="exam-navigation">
+                    <button type="button" id="btnPrev" class="btn-nav" onclick="changeQuestion(-1)">← Sebelumnya</button>
+                    <button type="button" id="btnNext" class="btn-nav" onclick="changeQuestion(1)">Selanjutnya →</button>
+                </div>
+
+                <button type="submit" class="btn-submit" style="margin-top: 25px; background-color: #27ae60;">Kirim & Selesaikan Ujian</button>
             </form>
         </div>
 
@@ -369,6 +483,7 @@
         ];
 
         let activeSoalList = [];
+        let currentQuestionIndex = 0; // State untuk melacak nomor soal yang dibuka
 
         // Dynamic Loading Dropdown Nama Siswa
         function loadNamaSiswa() {
@@ -425,21 +540,38 @@
             document.getElementById("examArea").style.display = "block";
         });
 
-        // Function Render Soal Ujian ke HTML
+        // Function Render Soal Ujian & Grid Nomor (DIPERBARUI)
         function renderSoal() {
             const container = document.getElementById("questionsContainer");
+            const numberGrid = document.getElementById("numberGrid");
+            
             container.innerHTML = "";
+            numberGrid.innerHTML = "";
+            currentQuestionIndex = 0;
 
             activeSoalList.forEach((item, index) => {
+                // 1. Render Tombol Grid Nomor
+                const btnNum = document.createElement("button");
+                btnNum.type = "button";
+                btnNum.className = `btn-number ${index === 0 ? 'active' : ''}`;
+                btnNum.id = `btn-num-${index}`;
+                btnNum.textContent = index + 1;
+                btnNum.onclick = function() {
+                    jumpToQuestion(index);
+                };
+                numberGrid.appendChild(btnNum);
+
+                // 2. Render Konten Soal
                 const divSoal = document.createElement("div");
-                divSoal.className = "soal-item";
+                divSoal.className = `soal-item ${index === 0 ? 'active' : ''}`;
+                divSoal.id = `soal-item-${index}`;
 
                 let optionsHTML = "";
                 item.pilihan.forEach((pilihanText, optIndex) => {
                     optionsHTML += `
                         <li class="option-item">
                             <label>
-                                <input type="radio" name="soal_${index}" value="${optIndex}" required>
+                                <input type="radio" name="soal_${index}" value="${optIndex}" onchange="markAsAnswered(${index})">
                                 ${escapeHTML(pilihanText)}
                             </label>
                         </li>
@@ -455,6 +587,42 @@
 
                 container.appendChild(divSoal);
             });
+
+            updateNavButtons();
+        }
+
+        // Pindah ke Soal Spesifik saat Nomor Klik
+        function jumpToQuestion(index) {
+            // Sembunyikan soal aktif lama
+            document.getElementById(`soal-item-${currentQuestionIndex}`).classList.remove("active");
+            document.getElementById(`btn-num-${currentQuestionIndex}`).classList.remove("active");
+
+            // Tampilkan soal baru
+            currentQuestionIndex = index;
+            document.getElementById(`soal-item-${currentQuestionIndex}`).classList.add("active");
+            document.getElementById(`btn-num-${currentQuestionIndex}`).classList.add("active");
+
+            updateNavButtons();
+        }
+
+        // Navigasi Tombol Sebelum/Sesudah
+        function changeQuestion(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < activeSoalList.length) {
+                jumpToQuestion(newIndex);
+            }
+        }
+
+        // Memberi Tanda Hijau pada Grid Nomor jika Sudah Dijawab
+        function markAsAnswered(index) {
+            const btnNum = document.getElementById(`btn-num-${index}`);
+            btnNum.classList.add("answered");
+        }
+
+        // Update Status Tombol Navigasi Bawah
+        function updateNavButtons() {
+            document.getElementById("btnPrev").disabled = (currentQuestionIndex === 0);
+            document.getElementById("btnNext").disabled = (currentQuestionIndex === activeSoalList.length - 1);
         }
 
         // Handle Submit Ujian & Perhitungan Nilai
@@ -463,13 +631,25 @@
 
             let benarCount = 0;
             const totalSoal = activeSoalList.length;
+            let firstUnansweredIndex = -1;
 
             activeSoalList.forEach((item, index) => {
                 const selectedOption = document.querySelector(`input[name="soal_${index}"]:checked`);
-                if (selectedOption && parseInt(selectedOption.value) === item.benar) {
-                    benarCount++;
+                if (selectedOption) {
+                    if (parseInt(selectedOption.value) === item.benar) {
+                        benarCount++;
+                    }
+                } else if (firstUnansweredIndex === -1) {
+                    firstUnansweredIndex = index;
                 }
             });
+
+            // Jika ada soal yang belum dijawab
+            if (firstUnansweredIndex !== -1) {
+                alert(`Masih ada soal yang belum dijawab! Mengarahkan ke nomor ${firstUnansweredIndex + 1}.`);
+                jumpToQuestion(firstUnansweredIndex);
+                return;
+            }
 
             const salahCount = totalSoal - benarCount;
             const totalNilai = benarCount * 5; // Setiap 1 soal bernilai 5 poin
