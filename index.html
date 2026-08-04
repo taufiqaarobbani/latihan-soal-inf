@@ -89,7 +89,6 @@
             background-color: #1e3c72;
         }
 
-        /* Styling Modal Result & Info */
         .result-box {
             display: none;
             margin-top: 20px;
@@ -114,10 +113,7 @@
             background-color: #1565c0;
         }
 
-        /* Styling Lembar Ujian */
-        #examArea {
-            display: none;
-        }
+        #examArea { display: none; }
 
         .exam-header {
             display: flex;
@@ -136,7 +132,19 @@
             margin-bottom: 4px;
         }
 
-        /* Grid Navigasi Nomor Soal */
+        .timer-box {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
         .number-nav-container {
             margin-bottom: 20px;
             background: #f8f9fa;
@@ -172,23 +180,18 @@
             font-size: 0.9rem;
         }
 
-        .btn-number:hover {
-            background-color: #dee2e6;
-        }
-
+        .btn-number:hover { background-color: #dee2e6; }
         .btn-number.active {
             background-color: #2a5298;
             color: white;
             border-color: #1e3c72;
             box-shadow: 0 0 0 2px rgba(42, 82, 152, 0.3);
         }
-
         .btn-number.answered {
             background-color: #27ae60;
             color: white;
             border-color: #219653;
         }
-
         .btn-number.active.answered {
             background-color: #1e7e34;
             border-color: #114b1f;
@@ -202,13 +205,8 @@
             margin-bottom: 20px;
         }
 
-        .soal-item {
-            display: none;
-        }
-
-        .soal-item.active {
-            display: block;
-        }
+        .soal-item { display: none; }
+        .soal-item.active { display: block; }
 
         .soal-text {
             font-size: 1.05rem;
@@ -218,14 +216,8 @@
             line-height: 1.5;
         }
 
-        .options-list {
-            list-style: none;
-        }
-
-        .option-item {
-            margin-bottom: 10px;
-        }
-
+        .options-list { list-style: none; }
+        .option-item { margin-bottom: 10px; }
         .option-item label {
             display: flex;
             align-items: center;
@@ -235,19 +227,16 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-
         .option-item label:hover {
             background-color: #f5f5f5;
             border-color: #2a5298;
         }
-
         .option-item input[type="radio"] {
             margin-right: 12px;
             accent-color: #2a5298;
             transform: scale(1.1);
         }
 
-        /* Navigasi Bawah */
         .exam-navigation {
             display: flex;
             justify-content: space-between;
@@ -267,18 +256,13 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-
-        .btn-nav:hover {
-            background-color: #5a6268;
-        }
-
+        .btn-nav:hover { background-color: #5a6268; }
         .btn-nav:disabled {
             background-color: #e0e0e0;
             color: #a0a0a0;
             cursor: not-allowed;
         }
 
-        /* Result Section */
         #scoreResult {
             display: none;
             text-align: center;
@@ -293,16 +277,12 @@
             text-align: left;
             border-left: 4px solid #2a5298;
         }
-
         .identitas-hasil p {
             margin-bottom: 5px;
             font-size: 1rem;
             color: #333;
         }
-
-        .identitas-hasil strong {
-            color: #1e3c72;
-        }
+        .identitas-hasil strong { color: #1e3c72; }
 
         .score-circle {
             width: 120px;
@@ -330,10 +310,8 @@
 <body>
 
     <div class="container">
-        <!-- Form Login Card -->
         <div id="loginCard" class="card login-card">
             <h2>Portal Login Ujian</h2>
-            
             <form id="loginForm">
                 <div class="form-group">
                     <label for="kelas">Pilih Kelas:</label>
@@ -346,62 +324,49 @@
                         <option value="Kelas XII.2">Kelas XII.2</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="nama">Pilih Nama Siswa:</label>
                     <select id="nama" required disabled>
                         <option value="" disabled selected>-- Pilih Kelas Terlebih Dahulu --</option>
                     </select>
                 </div>
-
                 <button type="submit" class="btn-submit">Masuk Ujian</button>
             </form>
-
             <div id="resultBox" class="result-box"></div>
         </div>
 
-        <!-- Area Ujian Online -->
         <div id="examArea" class="card">
             <div class="exam-header">
                 <div class="user-info">
                     <p><strong>Siswa:</strong> <span id="dispNama"></span></p>
                     <p><strong>Kelas:</strong> <span id="dispKelas"></span></p>
                 </div>
-                <div>
+                <div style="display: flex; align-items: center; gap: 10px;">
                     <span id="dispPaket" class="badge-paket"></span>
+                    <div class="timer-box"><span>⏱️</span><span id="timerDisplay">60:00</span></div>
                 </div>
             </div>
-
             <div class="number-nav-container">
                 <div class="number-nav-title">Navigasi Soal</div>
                 <div id="numberGrid" class="number-grid"></div>
             </div>
-
             <form id="examForm">
-                <div class="soal-card">
-                    <div id="questionsContainer"></div>
-                </div>
-
+                <div class="soal-card"><div id="questionsContainer"></div></div>
                 <div class="exam-navigation">
                     <button type="button" id="btnPrev" class="btn-nav" onclick="changeQuestion(-1)">← Sebelumnya</button>
                     <button type="button" id="btnNext" class="btn-nav" onclick="changeQuestion(1)">Selanjutnya →</button>
                 </div>
-
                 <button type="submit" class="btn-submit" style="margin-top: 25px; background-color: #27ae60;">Kirim & Selesaikan Ujian</button>
             </form>
         </div>
 
-        <!-- Area Hasil Ujian (DITAMBAHKAN TAMPILAN NAMA & KELAS) -->
         <div id="scoreResult" class="card">
             <h2>Hasil Ujian Online</h2>
-            
-            <!-- Bagian Identitas Siswa di Hasil -->
             <div class="identitas-hasil">
                 <p><strong>Nama Lengkap:</strong> <span id="hasilNama"></span></p>
                 <p><strong>Kelas:</strong> <span id="hasilKelas"></span></p>
                 <p><strong>Paket Soal:</strong> <span id="hasilPaket"></span></p>
             </div>
-
             <div class="score-circle" id="finalScore">0</div>
             <div class="score-details" id="scoreDetails"></div>
             <button onclick="location.reload()" class="btn-submit">Selesai & Keluar</button>
@@ -409,56 +374,19 @@
     </div>
 
     <script>
-        // Data Master Siswa Per Kelas
+        // ============ KONFIGURASI GOOGLE SHEET ============
+        // GANTI ALAMAT INI DENGAN LINK WEB APPS YANG ANDA BUAT NANTI
+        const GOOGLE_SHEET_WEBHOOK = "https://docs.google.com/spreadsheets/d/1Nzu85qjPlanOZ9ow1fQhLI0tKHXZ1YlseoSXHyu8s6Y/edit?usp=sharing";
+        // ==================================================
+
         const dataSiswa = {
-            "Kelas X.1": [
-                "AGUNG LASMANA", "AHMAD MAULANA", "ANA NI'MATUL ULAA", "ARYA SAPUTRA",
-                "BUNGA SAFITRI", "DEA RATNA", "DIMAS ADITIA", "EDWARD FABIANO",
-                "FAHRANI SALSABILA KURNIAWAN", "FIFIH NAILAH", "FUJIYANTI ARAFAH",
-                "HALIMAH REGINA PUTRI", "KEYSA AGITA PUTRI", "MOH SAKU", "MUCHAROPI",
-                "M. REZA", "NUR AZIZAH", "REFA", "RENALDI SETIAWAN", "SUPRIYOGI",
-                "SYIFAA KHOIRUNNISA", "UMU AIMAN", "VIDIYAH AYUNI", "WIDIA NINGSIH"
-            ],
-            "Kelas X.2": [
-                "ALENI", "AHMAD MAULUDDIN", "AKHMAD KAELANI", "ASYARA ADILLA KHANZA",
-                "BENTAR AL HUSNA", "CHIKA RAMADHANI", "DZAKY ALMER JAMAIL", "ERIKA HAMID",
-                "FAHAT DWI SAPUTRA", "FADHEA DWI VANNESA", "HAFIZAH NURUL AEINI",
-                "HABIBUN NURULLAH", "KHOERUL AZAM", "KENANGA AFISTA", "MARIO FATAN DERMAWAN",
-                "MUHAMAD DAVIN FERDIANSYAH", "MUHAMMAD ARIF AMIRUDDIN", "NURHALIMAH",
-                "PUTRI ANGGRAENI", "REZA", "RIFAT HIDAYAT", "SYAHPUTRA", "SELY RAHMADANI",
-                "SAMIUN", "ZULFIKAR"
-            ],
-            "Kelas XI": [
-                "ABDUL HAMID", "AGUNG PRAMANA", "ANDIKA RIZKI PUTRA", "APRIYAN", "ASIYA",
-                "DWI ANDIN JUANITA", "EFAN APRIANSYAH", "GALANG DWI PRATAMA", "HENGKI",
-                "ILHAM NOOR FAMI", "MEGA MUSTIKA", "MOH ADILATUN", "MOH FAZRI AMRULLAH",
-                "MOH. ARIF MAULANA", "MOH. MAULANA", "MOH. RIZAL", "MOHAMAD REVALDI",
-                "MOHAMMAD FARID HUSEN", "MOHAMMAD SHOPIULLAH", "MUFLIKHA DWI WAHYUNI",
-                "MUHAMAD ARSYADATUL UMAM", "MUHAMAD FADIL FADILLAH", "MUHAMMAD NUR ZAFIN",
-                "MUHAMMAD SANDIH", "NATASYA RAMADHANTI", "NOVA ALFIANA", "RAMADAN",
-                "RISKY MAULANA", "SEKAR KEMUNING", "SELVI", "SHERLY KHASANAH",
-                "SITI AFNI AULIYAH", "SOLEHA WIDIA WATI", "SULAIMAN", "SYIFATURRAHMAWATI"
-            ],
-            "Kelas XII.1": [
-                "ADEL LITA", "ALHANA", "ALPIN MUBAROK", "ANDI IBRAHIM BAANGGA RAHAWARIN",
-                "DIKI FIRMANSYAH", "FADLI FASHA SHAPUTRA", "GALIH VIJAR NUGRAHA",
-                "IJJATUL HIMAH", "LIORY ATTALA PRIYANA", "MARSELA AURILIANI PUTRI",
-                "MUHAMMAD IZARRUL AZHAR", "MUHAMMAD RIZQI ASHSHUBHI", "NAIF DERMAWAN",
-                "NINA NATASYA", "NURUL AINI", "PUTRI NURITA", "SAEFUL MU'MIN AL MADANI",
-                "SALMAH", "SITI FITRIYAH", "SUNADI", "TATIH AGUSTINA", "ZIDNI ILMAN"
-            ],
-            "Kelas XII.2": [
-                "AHMAD RIYANI", "ALDIANSYAH", "ANGGA", "ARMAN", "AULIA RAHMAWATI",
-                "DAMAR ADIYASA", "GIO RAHMADHAN", "IMAN MAULANA", "LUVI SAHRUL",
-                "MELISA", "MOHAMMAD AFIF MAULANA", "MOHAMMAD YASIN ARAFAT",
-                "NABILA AZZALIA PUTRI", "NATASHA SAFFA AZAHRA", "NILA LESTARI",
-                "NUR AZIZAH", "SAFIRA DEWI", "SEMI AJI DILAGA", "SITI RAHMA YANI",
-                "SITI SHOLEHA", "SRI HAYATI", "SUCI SEPTIANI", "SUTA",
-                "TIARA PUTRI FEBRIYANTI"
-            ]
+            "Kelas X.1": ["AGUNG LASMANA", "AHMAD MAULANA", "ANA NI'MATUL ULAA", "ARYA SAPUTRA", "BUNGA SAFITRI", "DEA RATNA", "DIMAS ADITIA", "EDWARD FABIANO", "FAHRANI SALSABILA KURNIAWAN", "FIFIH NAILAH", "FUJIYANTI ARAFAH", "HALIMAH REGINA PUTRI", "KEYSA AGITA PUTRI", "MOH SAKU", "MUCHAROPI", "M. REZA", "NUR AZIZAH", "REFA", "RENALDI SETIAWAN", "SUPRIYOGI", "SYIFAA KHOIRUNNISA", "UMU AIMAN", "VIDIYAH AYUNI", "WIDIA NINGSIH"],
+            "Kelas X.2": ["ALENI", "AHMAD MAULUDDIN", "AKHMAD KAELANI", "ASYARA ADILLA KHANZA", "BENTAR AL HUSNA", "CHIKA RAMADHANI", "DZAKY ALMER JAMAIL", "ERIKA HAMID", "FAHAT DWI SAPUTRA", "FADHEA DWI VANNESA", "HAFIZAH NURUL AEINI", "HABIBUN NURULLAH", "KHOERUL AZAM", "KENANGA AFISTA", "MARIO FATAN DERMAWAN", "MUHAMAD DAVIN FERDIANSYAH", "MUHAMMAD ARIF AMIRUDDIN", "NURHALIMAH", "PUTRI ANGGRAENI", "REZA", "RIFAT HIDAYAT", "SYAHPUTRA", "SELY RAHMADANI", "SAMIUN", "ZULFIKAR"],
+            "Kelas XI": ["ABDUL HAMID", "AGUNG PRAMANA", "ANDIKA RIZKI PUTRA", "APRIYAN", "ASIYA", "DWI ANDIN JUANITA", "EFAN APRIANSYAH", "GALANG DWI PRATAMA", "HENGKI", "ILHAM NOOR FAMI", "MEGA MUSTIKA", "MOH ADILATUN", "MOH FAZRI AMRULLAH", "MOH. ARIF MAULANA", "MOH. MAULANA", "MOH. RIZAL", "MOHAMAD REVALDI", "MOHAMMAD FARID HUSEN", "MOHAMMAD SHOPIULLAH", "MUFLIKHA DWI WAHYUNI", "MUHAMAD ARSYADATUL UMAM", "MUHAMAD FADIL FADILLAH", "MUHAMMAD NUR ZAFIN", "MUHAMMAD SANDIH", "NATASYA RAMADHANTI", "NOVA ALFIANA", "RAMADAN", "RISKY MAULANA", "SEKAR KEMUNING", "SELVI", "SHERLY KHASANAH", "SITI AFNI AULIYAH", "SOLEHA WIDIA WATI", "SULAIMAN", "SYIFATURRAHMAWATI"],
+            "Kelas XII.1": ["ADEL LITA", "ALHANA", "ALPIN MUBAROK", "ANDI IBRAHIM BAANGGA RAHAWARIN", "DIKI FIRMANSYAH", "FADLI FASHA SHAPUTRA", "GALIH VIJAR NUGRAHA", "IJJATUL HIMAH", "LIORY ATTALA PRIYANA", "MARSELA AURILIANI PUTRI", "MUHAMMAD IZARRUL AZHAR", "MUHAMMAD RIZQI ASHSHUBHI", "NAIF DERMAWAN", "NINA NATASYA", "NURUL AINI", "PUTRI NURITA", "SAEFUL MU'MIN AL MADANI", "SALMAH", "SITI FITRIYAH", "SUNADI", "TATIH AGUSTINA", "ZIDNI ILMAN"],
+            "Kelas XII.2": ["AHMAD RIYANI", "ALDIANSYAH", "ANGGA", "ARMAN", "AULIA RAHMAWATI", "DAMAR ADIYASA", "GIO RAHMADHAN", "IMAN MAULANA", "LUVI SAHRUL", "MELISA", "MOHAMMAD AFIF MAULANA", "MOHAMMAD YASIN ARAFAT", "NABILA AZZALIA PUTRI", "NATASHA SAFFA AZAHRA", "NILA LESTARI", "NUR AZIZAH", "SAFIRA DEWI", "SEMI AJI DILAGA", "SITI RAHMA YANI", "SITI SHOLEHA", "SRI HAYATI", "SUCI SEPTIANI", "SUTA", "TIARA PUTRI FEBRIYANTI"]
         };
 
-        // Bank Soal Paket A (HTML)
         const paketSoalA = [
             { soal: "1. Web Browser merupakan tools utama yang digunakan untuk menampilkan halaman web, Manakah yang bukan Web Browser yang sering digunakan di PC ...", pilihan: ["A. Google Chrome", "B. Safari", "C. FireFox", "D. Microsoft Store", "E. Microsoft Edge"], benar: 3 },
             { soal: "2. Kepanjangan dari HTML adalah ...", pilihan: ["A. Hyper Text Markup Language", "B. High Tech Modern Language", "C. Hyperlink Text Management Language", "D. Home Tool Markup Language", "E. Hyper Text Multi Language"], benar: 0 },
@@ -479,10 +407,9 @@
             { soal: "17. Atribut yang digunakan untuk menentukan alamat file gambar pada tag <img> adalah ...", pilihan: ["A. src", "B. href", "C. link", "D. url", "E. path"], benar: 0 },
             { soal: "18. Tag yang digunakan untuk membuat tautan/link adalah ...", pilihan: ["A. <link>", "B. <a>", "C. <url>", "D. <hubung>", "E. <tautan>"], benar: 1 },
             { soal: "19. Atribut yang digunakan untuk menentukan alamat tujuan pada link adalah ...", pilihan: ["A. src", "B. href", "C. link", "D. target", "E. rel"], benar: 1 },
-            { soal: "20. Jumlah ukuran judul dari yang terbesar sampai terkecil pada tag heading adalah ...", pilihan: ["A. h1 sampai h6", "B. h6 sampai h1", "C. heading1 sampai heading6", "D. ukuran1 sampai ukuran6", "E. h0 sampai h5"], benar: 0 },
+            { soal: "20. Jumlah ukuran judul dari yang terbesar sampai terkecil pada tag heading adalah ...", pilihan: ["A. h1 sampai h6", "B. h6 sampai h1", "C. heading1 sampai heading6", "D. ukuran1 sampai ukuran6", "E. h0 sampai h5"], benar: 0 }
         ];
 
-        // Bank Soal Paket B (C++)
         const paketSoalB = [
             { soal: "1. Siapakah pencipta bahasa pemrograman C++?", pilihan: ["A. Dennis Ritchie", "B. Bjarne Stroustrup", "C. Guido van Rossum", "D. James Gosling", "E. Linus Torvalds"], benar: 1 },
             { soal: "2. Ekstensi file standar untuk program bahasa C++ adalah ...", pilihan: ["A. .cp", "B. .c", "C. .cpp", "D. .class", "E. .exe"], benar: 2 },
@@ -503,7 +430,7 @@
             { soal: "17. Operator logika yang bernilai TRUE jika kedua kondisi bernilai TRUE adalah ...", pilihan: ["A. ||", "B. !", "C. &&", "D. ==", "E. !="], benar: 2 },
             { soal: "18. Manakah simbol operator logika OR dalam C++?", pilihan: ["A. &&", "B. ||", "C. !", "D. &", "E. |"], benar: 1 },
             { soal: "19. Struktur percabangan yang digunakan untuk mengeksekusi kode jika kondisi bernilai benar adalah ...", pilihan: ["A. for", "B. while", "C. if", "D. switch", "E. do-while"], benar: 2 },
-            { soal: "20. Struktur percabangan yang cocok untuk menangani banyak pilihan nilai yang pasti/spesifik adalah ...", pilihan: ["A. if-else", "B. switch-case", "C. for-loop", "D. while", "E. try-catch"], benar: 1 },
+            { soal: "20. Struktur percabangan yang cocok untuk menangani banyak pilihan nilai yang pasti/spesifik adalah ...", pilihan: ["A. if-else", "B. switch-case", "C. for-loop", "D. while", "E. try-catch"], benar: 1 }
         ];
 
         let activeSoalList = [];
@@ -511,16 +438,15 @@
         let namaSiswaTerpilih = "";
         let kelasSiswaTerpilih = "";
         let paketSoalTerpilih = "";
+        let totalTimeInSeconds = 3600; 
+        let timerInterval;
 
-        // Dynamic Loading Dropdown Nama Siswa
         function loadNamaSiswa() {
             const kelasSelect = document.getElementById("kelas");
             const namaSelect = document.getElementById("nama");
             const selectedKelas = kelasSelect.value;
-
             namaSelect.innerHTML = '<option value="" disabled selected>-- Pilih Nama --</option>';
             namaSelect.disabled = true;
-
             if (selectedKelas && dataSiswa[selectedKelas]) {
                 dataSiswa[selectedKelas].forEach(nama => {
                     const option = document.createElement("option");
@@ -532,181 +458,170 @@
             }
         }
 
-        // Handle Event Form Submit / Login
         document.getElementById("loginForm").addEventListener("submit", function(e) {
             e.preventDefault();
-
             const kelas = document.getElementById("kelas").value;
             const nama = document.getElementById("nama").value;
             const resultBox = document.getElementById("resultBox");
-
             if (!kelas || !nama) {
                 resultBox.className = "result-box error";
                 resultBox.innerHTML = "Harap lengkapi pilihan Kelas dan Nama!";
                 resultBox.style.display = "block";
                 return;
             }
-
-            // Simpan data siswa ke variabel global
             namaSiswaTerpilih = nama;
             kelasSiswaTerpilih = kelas;
-
-            // Aturan Penentuan Paket Soal
             if (kelas === "Kelas XII.1" || kelas === "Kelas XII.2") {
                 paketSoalTerpilih = "Paket A (HTML)";
                 activeSoalList = paketSoalA;
-            } else if (kelas === "Kelas X.1" || kelas === "Kelas X.2" || kelas === "Kelas XI") {
+            } else {
                 paketSoalTerpilih = "Paket B (C++)";
                 activeSoalList = paketSoalB;
             }
-
-            // Menyembunyikan Login, Menampilkan Ujian
             document.getElementById("loginCard").style.display = "none";
             document.getElementById("dispNama").textContent = nama;
             document.getElementById("dispKelas").textContent = kelas;
             document.getElementById("dispPaket").textContent = paketSoalTerpilih;
-
             renderSoal();
             document.getElementById("examArea").style.display = "block";
+            startTimer();
         });
 
-        // Function Render Soal Ujian & Grid Nomor
+        function startTimer() {
+            const timerDisplay = document.getElementById("timerDisplay");
+            timerInterval = setInterval(() => {
+                let minutes = Math.floor(totalTimeInSeconds / 60);
+                let seconds = totalTimeInSeconds % 60;
+                timerDisplay.textContent = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+                if (totalTimeInSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Waktu habis! Jawaban dikumpulkan otomatis.");
+                    processExamResult();
+                } else {
+                    totalTimeInSeconds--;
+                }
+            }, 1000);
+        }
+
         function renderSoal() {
             const container = document.getElementById("questionsContainer");
             const numberGrid = document.getElementById("numberGrid");
-            
             container.innerHTML = "";
             numberGrid.innerHTML = "";
             currentQuestionIndex = 0;
-
             activeSoalList.forEach((item, index) => {
-                // Render Tombol Grid Nomor
                 const btnNum = document.createElement("button");
                 btnNum.type = "button";
                 btnNum.className = `btn-number ${index === 0 ? 'active' : ''}`;
                 btnNum.id = `btn-num-${index}`;
                 btnNum.textContent = index + 1;
-                btnNum.onclick = function() {
-                    jumpToQuestion(index);
-                };
+                btnNum.onclick = () => jumpToQuestion(index);
                 numberGrid.appendChild(btnNum);
 
-                // Render Konten Soal
                 const divSoal = document.createElement("div");
                 divSoal.className = `soal-item ${index === 0 ? 'active' : ''}`;
                 divSoal.id = `soal-item-${index}`;
-
                 let optionsHTML = "";
                 item.pilihan.forEach((pilihanText, optIndex) => {
-                    optionsHTML += `
-                        <li class="option-item">
-                            <label>
-                                <input type="radio" name="soal_${index}" value="${optIndex}" onchange="markAsAnswered(${index})">
-                                ${escapeHTML(pilihanText)}
-                            </label>
-                        </li>
-                    `;
+                    optionsHTML += `<li class="option-item"><label><input type="radio" name="soal_${index}" value="${optIndex}" onchange="markAsAnswered(${index})"> ${pilihanText}</label></li>`;
                 });
-
-                divSoal.innerHTML = `
-                    <div class="soal-text">${escapeHTML(item.soal)}</div>
-                    <ul class="options-list">
-                        ${optionsHTML}
-                    </ul>
-                `;
-
+                divSoal.innerHTML = `<div class="soal-text">${item.soal}</div><ul class="options-list">${optionsHTML}</ul>`;
                 container.appendChild(divSoal);
             });
-
             updateNavButtons();
         }
 
-        // Pindah ke Soal Spesifik saat Nomor Klik
+        function markAsAnswered(index) { document.getElementById(`btn-num-${index}`)?.classList.add("answered"); }
         function jumpToQuestion(index) {
             document.getElementById(`soal-item-${currentQuestionIndex}`).classList.remove("active");
             document.getElementById(`btn-num-${currentQuestionIndex}`).classList.remove("active");
-
             currentQuestionIndex = index;
             document.getElementById(`soal-item-${currentQuestionIndex}`).classList.add("active");
             document.getElementById(`btn-num-${currentQuestionIndex}`).classList.add("active");
-
             updateNavButtons();
         }
+        function changeQuestion(step) {
+            const newIndex = currentQuestionIndex + step;
+            if (newIndex >= 0 && newIndex < activeSoalList.length) jumpToQuestion(newIndex);
+        }
+        function updateNavButtons() {
+            document.getElementById("btnPrev").disabled = currentQuestionIndex === 0;
+            document.getElementById("btnNext").disabled = currentQuestionIndex === activeSoalList.length - 1;
+        }
 
-        // Navigasi Tombol Sebelum/Sesudah
-        function changeQuestion(direction) {
-            const newIndex = currentQuestionIndex + direction;
-            if (newIndex >= 0 && newIndex < activeSoalList.length) {
-                jumpToQuestion(newIndex);
+        document.getElementById("examForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            if (confirm("Yakin ingin menyelesaikan ujian?")) {
+                clearInterval(timerInterval);
+                processExamResult();
+            }
+        });
+
+        // FUNGSI KIRIM DATA KE GOOGLE SHEET
+        async function kirimKeGoogleSheet(dataHasil) {
+            try {
+                const response = await fetch(GOOGLE_SHEET_WEBHOOK, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(dataHasil)
+                });
+                console.log("✅ Jawaban terkirim ke Google Sheet");
+            } catch (err) {
+                console.error("❌ Gagal kirim:", err);
             }
         }
 
-        // Memberi Tanda Hijau pada Grid Nomor jika Sudah Dijawab
-        function markAsAnswered(index) {
-            const btnNum = document.getElementById(`btn-num-${index}`);
-            btnNum.classList.add("answered");
-        }
-
-        // Update Status Tombol Navigasi Bawah
-        function updateNavButtons() {
-            document.getElementById("btnPrev").disabled = (currentQuestionIndex === 0);
-            document.getElementById("btnNext").disabled = (currentQuestionIndex === activeSoalList.length - 1);
-        }
-
-        // Handle Submit Ujian & Perhitungan Nilai
-        document.getElementById("examForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            let benarCount = 0;
+        function processExamResult() {
+            let skor = 0, benarCount = 0, salahCount = 0, kosongCount = 0;
             const totalSoal = activeSoalList.length;
-            let firstUnansweredIndex = -1;
+            const poinPerSoal = 100 / totalSoal;
+            let daftarJawaban = [];
 
             activeSoalList.forEach((item, index) => {
                 const selectedOption = document.querySelector(`input[name="soal_${index}"]:checked`);
+                let jawabanSiswa = "-";
                 if (selectedOption) {
-                    if (parseInt(selectedOption.value) === item.benar) {
-                        benarCount++;
-                    }
-                } else if (firstUnansweredIndex === -1) {
-                    firstUnansweredIndex = index;
-                }
+                    jawabanSiswa = parseInt(selectedOption.value);
+                    if (jawabanSiswa === item.benar) { skor += poinPerSoal; benarCount++; }
+                    else { salahCount++; }
+                } else { kosongCount++; }
+                daftarJawaban.push(jawabanSiswa);
             });
 
-            // Jika ada soal yang belum dijawab
-            if (firstUnansweredIndex !== -1) {
-                alert(`Masih ada soal yang belum dijawab! Mengarahkan ke nomor ${firstUnansweredIndex + 1}.`);
-                jumpToQuestion(firstUnansweredIndex);
-                return;
-            }
+            const finalSkor = Math.round(skor);
+            const waktuSelesai = new Date().toLocaleString("id-ID");
 
-            const salahCount = totalSoal - benarCount;
-            const totalNilai = benarCount * 5;
+            // Susun data lengkap untuk dikirim
+            const dataKirim = {
+                nama: namaSiswaTerpilih,
+                kelas: kelasSiswaTerpilih,
+                paket: paketSoalTerpilih,
+                waktu: waktuSelesai,
+                skor: finalSkor,
+                benar: benarCount,
+                salah: salahCount,
+                kosong: kosongCount,
+                jawaban: daftarJawaban.join(",")
+            };
 
-            // Tampilkan Halaman Hasil DENGAN Identitas Siswa
+            // Kirim ke Google Sheet
+            kirimKeGoogleSheet(dataKirim);
+
+            // Tampilkan Hasil
             document.getElementById("examArea").style.display = "none";
-            
-            // Isi data identitas di halaman hasil
             document.getElementById("hasilNama").textContent = namaSiswaTerpilih;
             document.getElementById("hasilKelas").textContent = kelasSiswaTerpilih;
             document.getElementById("hasilPaket").textContent = paketSoalTerpilih;
-            
-            document.getElementById("finalScore").textContent = totalNilai;
+            document.getElementById("finalScore").textContent = finalSkor;
             document.getElementById("scoreDetails").innerHTML = `
-                Jawaban Benar: <strong>${benarCount}</strong> soal<br>
-                Jawaban Salah: <strong>${salahCount}</strong> soal<br>
-                Total Soal: <strong>${totalSoal}</strong> Butir
+                Total Soal: <strong>${totalSoal}</strong><br>
+                Benar: <strong style="color:green;">${benarCount}</strong> | 
+                Salah: <strong style="color:red;">${salahCount}</strong> | 
+                Kosong: <strong style="color:orange;">${kosongCount}</strong><br>
+                Waktu Selesai: ${waktuSelesai}
             `;
             document.getElementById("scoreResult").style.display = "block";
-        });
-
-        // Helper untuk keamanan penulisan Tag HTML
-        function escapeHTML(str) {
-            return str
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
         }
     </script>
 </body>
